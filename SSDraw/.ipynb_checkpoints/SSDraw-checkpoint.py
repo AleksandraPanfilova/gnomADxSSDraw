@@ -887,8 +887,8 @@ def SSDraw(args=None,parser=None):
     helix_coords2 = []
     
     width = args.end - args.start + 1
-
-    fig, ax = plt.subplots(ncols=1, figsize=(width*8,2+1.5*(nlines-1)))
+    
+    fig, ax = plt.subplots(ncols=1, figsize=(width/8,2+1.5*(nlines-1)))
     
     for i in range(len(ss_order)):
         prev_ss = None
