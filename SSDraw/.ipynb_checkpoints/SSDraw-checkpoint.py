@@ -88,11 +88,11 @@ def gap_sequence(seq, extra_gaps):
         new_seq = new_seq[:-extra_gaps[1]]
     return new_seq[extra_gaps[0]:]
 
-def NormalizeData(data):
+def NormalizeData(data, glob_min, glob_max):
     if np.min(data) == np.max(data):
         warnings.warn("Warning: scores are the same for all residues")
         return data
-    return (data - np.min(data)) / (np.max(data) - np.min(data))
+    return (data - glob_min) / (glob_max - glob_min)
 
 def coords2path(coord_set1):
 
@@ -857,7 +857,7 @@ def SSDraw(args=None,parser=None):
     #Parse color and scoring args
     CMAP, bvals = parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps)
 
-    mat = np.tile(NormalizeData(bvals), (100,1))
+    mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
 
     #set figure parameters
     sz = 0
