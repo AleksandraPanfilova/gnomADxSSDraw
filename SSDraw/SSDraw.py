@@ -860,7 +860,7 @@ def SSDraw(args=None,parser=None):
     mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
     
     print(len(bfactors), np.min(bfactors), np.max(bfactors))
-    print(bval)
+    print(bvals)
     print(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)))
     print(mat)
 
