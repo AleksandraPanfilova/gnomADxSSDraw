@@ -424,7 +424,7 @@ def plot_coords(coords_all,mat,sz,CMAP,plot=None,ysz=0.5):
             plot.add_patch(patch)
         else:
             plt.gca().add_patch(patch)
-        im = plt.imshow(mat,extent=[0.0,sz,ysz,3],cmap=CMAP,interpolation='none',zorder=z)
+        im = plt.imshow(mat,extent=[0.0,sz,ysz,3],cmap=CMAP, vmin=0, vmax=1, interpolation='none',zorder=z)
         im.set_clip_path(patch)
         
             
@@ -858,11 +858,6 @@ def SSDraw(args=None,parser=None):
     CMAP, bvals = parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps)
 
     mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
-    
-    print(len(bfactors), np.min(bfactors), np.max(bfactors))
-    print(bvals)
-    print(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)))
-    print(mat)
 
     #set figure parameters
     sz = 0
