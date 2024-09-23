@@ -858,6 +858,8 @@ def SSDraw(args=None,parser=None):
     CMAP, bvals = parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps)
 
     mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
+    
+    print(len(bfactors), np.min(bfactors), np.max(bfactors))
 
     #set figure parameters
     sz = 0
