@@ -923,7 +923,7 @@ def SSDraw(args=None,parser=None):
         res_x = 0.1658
         ticks = []
         labels = []
-        i = 0.0828
+        i = 0.0829
         label_i = 1
         while label_i <= len(bvals):
             ticks.append(i)
