@@ -926,10 +926,12 @@ def SSDraw(args=None,parser=None):
         i = 0.165
         label_i = 1
         while label_i <= len(bvals):
-            ticks.append(i)
+            #ticks.append(i)
             labels.append(str(label_i+args.start))
             #i+=res_x*args.ticks
-            i+=res_x
+            for c in range(args.ticks):
+                ticks.append(i)
+                i+=res_x
             label_i+=args.ticks
         ax.get_xaxis().set_ticks(ticks,labels=labels)
         ax.xaxis.set_ticks_position('top')
