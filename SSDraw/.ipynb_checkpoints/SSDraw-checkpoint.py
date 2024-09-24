@@ -920,10 +920,10 @@ def SSDraw(args=None,parser=None):
     if args.ticks == 0:
         ax.get_xaxis().set_ticks([])
     else:
-        res_x = 0.165
+        res_x = 0.1658
         ticks = []
         labels = []
-        i = 0.16
+        i = 0.0828
         label_i = 1
         while label_i <= len(bvals):
             ticks.append(i)
