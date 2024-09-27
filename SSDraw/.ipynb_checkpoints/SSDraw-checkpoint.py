@@ -253,9 +253,11 @@ def SS_breakdown(ss):
                   '-':'break',
                   'E':'strand',
                   'B':'strand'}
-
+    print(ss)
     for i in range(len(ss)):
-        
+        # print('Index: ', i)
+        # print('Last ss: ', last_ss)
+        # print('SS element: ', ss[i])
         if i == 0:
             curSS = SS_equivalencies[ss[i]]
             jstart = i
@@ -268,6 +270,7 @@ def SS_breakdown(ss):
         if ss[i] in curSS:
             jend = i
         
+        # if thid is a start of new element
         if ss[i] not in curSS or i == len(ss)-1:
             if 'E' in curSS and jend-jstart+1 >= 3:
                 strand.append((jstart,jend))
@@ -313,9 +316,17 @@ def SS_breakdown(ss):
                 ss_order.append('L')
                 last_ss = 'loop'
             
-
+            if (ss[i] not in curSS) & (i == len(ss)-1):
+                loop.append((i,i))
+                ss_bounds.append((i,i))
+                ss_order.append('L')
+                last_ss = 'loop'
+            
             jstart = i
-            curSS = SS_equivalencies[ss[i]]
+            curSS = SS_equivalencies[ss[i]] #get curSS for the new SS element
+            #print(curSS)
+        # print(ss_order)
+        # print(ss_bounds)
 
     return strand,loop,helix, ssbreak, ss_order, ss_bounds
 
@@ -865,21 +876,29 @@ def SSDraw(args=None,parser=None):
     bc = 'none'
 
     #set sizes of SS chunks
-    ss_prev = 0
-    for i in range(len(ss_order)):
+#     ss_prev = 0
+#     for i in range(len(ss_order)):
         
-        if ss_order[i] == 'H':
-            ss_prev = ss_bounds[i][1]/6.0+1/6.0
-        else:
-            ss_prev = ss_bounds[i][1]/6.0
+#         if ss_order[i] == 'H':
+#             ss_prev = ss_bounds[i][1]/6.0+1/6.0
+#         else:
+#             ss_prev = ss_bounds[i][1]/6.0
 
+    # Depending on the last SS element, define the size of image
     if ss_order[-1] == 'H':
         sz = ss_bounds[-1][1]/6.0+1/6.0
     elif ss_order[-1] in ['E','B']:
         sz = ss_bounds[-1][1]/6.0
     elif ss_order[-1] == 'L':
-        sz = (ss_bounds[-1][1])/6.0
-
+        sz = ss_bounds[-1][1]/6.0
+    
+    # if ss_order[-1] == 'H':
+    #     sz = (args.end-args.start)/6.0+1/6.0
+    # elif ss_order[-1] in ['E','B']:
+    #     sz = (args.end-args.start)/6.0
+    # elif ss_order[-1] == 'L':
+    #     sz = (args.end-args.start)/6.0
+        
     #Plot secondary structure chunks
     strand_coords = []
     loop_coords = []
@@ -898,6 +917,7 @@ def SSDraw(args=None,parser=None):
         if i != len(ss_order)-1:
             next_ss = ss_order[i+1]
 
+        # size parameter is not used in the function ¯\_(=_=)_/¯
         if ss_order[i] == 'L':
             build_loop(ss_bounds[i],0,-(2.0/SPACING),loop_coords,len(ss_wgaps),1,prev_ss,next_ss,z=0,clr=c,mat=mat,size=sz)
         elif ss_order[i] == 'H':
@@ -907,6 +927,7 @@ def SSDraw(args=None,parser=None):
     
 
     plot_coords([loop_coords,helix_coords2,strand_coords,helix_coords1],mat,sz,CMAP)
+    print(sz)
     
     plt.ylim([0.5,3])
 
@@ -920,21 +941,33 @@ def SSDraw(args=None,parser=None):
     if args.ticks == 0:
         ax.get_xaxis().set_ticks([])
     else:
-        res_x = 0.1658
+        # if ss_order[-1] == 'H':
+        #     ss_bounds[-1][1]/6.0+1/6.0
+        #     res_x = 0.165
+        # elif ss_order[-1] in ['E','B']:
+        #     sz = ss_bounds[-1][1]/6.0
+        #     res_x = 0.165
+        # elif ss_order[-1] == 'L':
+        #     sz = ss_bounds[-1][1]/6.0
+        #     res_x = 0.165
+        
+        res_x = sz/(ss_bounds[-1][1]+1)
+        #res_x = 0.1636
         ticks = []
         labels = []
-        i = 0.0829
+        i = res_x/2
+        #i = 0.0818
         label_i = 1
-        while label_i <= len(bvals):
+        while label_i <= (args.end - args.start + 1):
             ticks.append(i)
-            labels.append(str(label_i+args.start))
-            #i+=res_x*args.ticks
             i+=res_x
-            for c in range(args.ticks-1):
-                ticks.append(i)
+            if (label_i%args.ticks == 0)|(label_i == 1)|(label_i==args.end+1):
+                labels.append(str(label_i+args.start))
+            else:
                 labels.append('')
-                i+=res_x
-            label_i+=args.ticks
+            label_i+=1
+        # print(ss_bounds)
+        # print(ss_order)
         ax.get_xaxis().set_ticks(ticks,labels=labels)
         ax.xaxis.set_ticks_position('top')
 
