@@ -253,7 +253,7 @@ def SS_breakdown(ss):
                   '-':'break',
                   'E':'strand',
                   'B':'strand'}
-    print(ss)
+    # print(ss)
     for i in range(len(ss)):
         # print('Index: ', i)
         # print('Last ss: ', last_ss)
@@ -927,7 +927,7 @@ def SSDraw(args=None,parser=None):
     
 
     plot_coords([loop_coords,helix_coords2,strand_coords,helix_coords1],mat,sz,CMAP)
-    print(sz)
+    # print(sz)
     
     plt.ylim([0.5,3])
 
