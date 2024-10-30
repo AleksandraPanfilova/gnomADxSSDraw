@@ -830,7 +830,7 @@ def initialize(args=None,parser=None):
     # preface run
     id = args.name  
     chain_id = args.chain_id
-    print("\nRunning for: "+id)
+    # print("\nRunning for: "+id)
 
     # read in amino acid sequence from PDB
     bfactors, pdbseq = read_pdb(id,args)
@@ -974,7 +974,7 @@ def SSDraw(args=None,parser=None):
 
     ax.set_aspect(0.5)
 
-    print("Saving output to {:}.{:}...".format(args.output, args.output_file_type))
+    # print("Saving output to {:}.{:}...".format(args.output, args.output_file_type))
     plt.savefig(args.output+'.'+args.output_file_type,bbox_inches='tight',dpi=args.dpi,transparent=True)
 
 if __name__ == '__main__':
