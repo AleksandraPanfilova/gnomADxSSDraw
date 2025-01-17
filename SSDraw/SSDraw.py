@@ -868,13 +868,13 @@ def SSDraw(args=None,parser=None):
     #Parse color and scoring args
     CMAP, bvals = parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps)
 
-    mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
-    print(np.min(bfactors))
-    print(np.max(bfactors))
-    print(type(np.min(bfactors)))
-    print(bfactors)
-    print(type(bfactors))
-    #mat = np.tile(NormalizeData(bvals, -8.0, 0.0), (100,1))
+    # mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
+    # print(np.min(bfactors))
+    # print(np.max(bfactors))
+    # print(type(np.min(bfactors)))
+    # print(bfactors)
+    # print(type(bfactors))
+    mat = np.tile(NormalizeData(bvals, np.float64(-8.0), np.float64(0.0)), (100,1))
 
     #set figure parameters
     sz = 0
