@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
 import matplotlib.path as mpath
 import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import warnings
 from Bio import BiopythonDeprecationWarning
@@ -435,6 +437,11 @@ def plot_coords(coords_all,mat,sz,CMAP,plot=None,ysz=0.5):
             plot.add_patch(patch)
         else:
             plt.gca().add_patch(patch)
+    
+        if isinstance(CMAP, str):
+            CMAP = matplotlib.colormaps.get_cmap(CMAP)  # viridis is the default colormap for imshow
+            CMAP.set_bad(color='dimgray')
+        
         im = plt.imshow(mat,extent=[0.0,sz,ysz,3],cmap=CMAP, vmin=0, vmax=1, interpolation='none',zorder=z)
         im.set_clip_path(patch)
         
@@ -550,11 +557,15 @@ def parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps):
         CMAP = ListedColormap([args.color])
     elif args.color[0] == "#":
         CMAP = ListedColormap([args.color])
+        
     if args.conservation_score or args.bfactor or args.scoring_file:
+        print(args.color_map)
         if len(args.color_map) == 1:
             CMAP = args.color_map[0]
         else:
             CMAP = ListedColormap(args.color_map)
+            # CMAP = LinearSegmentedColormap.from_list('cmap', args.color_map)
+            CMAP.set_bad('dimgray')
 
     #bvals are to make the colormap; taken from input PDB
     bvals = []
@@ -664,7 +675,14 @@ def parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps):
 
 
     elif args.bfactor:  # score by bfactor
-        bvals = [b for b in bfactors]
+        # bvals = [b for b in bfactors]
+        bvals = list()
+        for b in bfactors:
+            if b == 'nan':
+                bvals.append(np.nan)
+            else:
+                bvals.append(b)
+            
   
     elif args.conservation_score: # score by conservation score     
         bvals = []
@@ -867,8 +885,7 @@ def SSDraw(args=None,parser=None):
 
     #Parse color and scoring args
     CMAP, bvals = parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps)
-
-    mat = np.tile(NormalizeData(bvals, np.min(bfactors), np.max(bfactors)), (100,1))
+    mat = np.tile(NormalizeData(bvals, np.nanmin(bfactors), np.nanmax(bfactors)), (100,1))
 
     #set figure parameters
     sz = 0
