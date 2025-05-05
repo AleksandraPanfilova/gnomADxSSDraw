@@ -559,7 +559,6 @@ def parse_color(args,seq_wgaps,pdbseq,bfactors,msa,extra_gaps):
         CMAP = ListedColormap([args.color])
         
     if args.conservation_score or args.bfactor or args.scoring_file:
-        print(args.color_map)
         if len(args.color_map) == 1:
             CMAP = args.color_map[0]
         else:
